@@ -1,0 +1,74 @@
+# electron-builder 打包配置
+# Windows：npm run build:win   （需在 Windows 机器上执行，或安装 wine）
+# Ubuntu： npm run build:linux
+appId: io.mclauncher.app
+productName: MC Launcher
+copyright: Copyright © 2026 MC Launcher Team
+
+directories:
+  output: release
+  buildResources: build
+
+# 主进程只依赖 Node 内置模块，渲染层已被 Vite 打进 dist/
+files:
+  - package.json
+  - electron/**/*
+  - dist/**/*
+  - "!**/*.map"
+  - "!node_modules/**/*"
+
+asar: true
+npmRebuild: false
+
+# 直接使用 node_modules/electron/dist 本地二进制（npm install 时已下载），
+# 避免 electron-builder 再从网络拉取 electron zip
+electronDist: node_modules/electron/dist
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: build/icon.png
+  artifactName: ${productName}-${version}-win-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: MC Launcher
+  multiLanguageInstaller: true
+  installerLanguages:
+    - English
+    - SimpChinese
+  artifactName: ${productName}-${version}-setup-${arch}.${ext}
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+  icon: build/icon.png
+  category: Game
+  synopsis: Cross-platform Minecraft launcher (Windows / Ubuntu)
+  maintainer: MC Launcher Team <dev@mclauncher.local>
+  # 文件名不带空格：终端免引号；AppImage 挂载目录也不会带空格
+  # （安装目录 /opt/<productName> 的空格问题由 scripts/linux-install.sh 修正）
+  artifactName: mc-launcher-${version}-linux-${arch}.${ext}
+
+deb:
+  # 运行时依赖（Electron 运行所需动态库）
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - libatspi2.0-0
+    - libuuid1
+    - xdg-utils
