@@ -4,6 +4,12 @@
 
 ![icon](build/icon.png)
 
+## 界面截图
+
+| 主页 | 版本管理 | 下载管理 |
+| --- | --- | --- |
+| ![主页](docs/screenshots/home.png) | ![版本管理](docs/screenshots/versions.png) | ![下载管理](docs/screenshots/downloads.png) |
+
 ## 功能特性
 
 - **版本管理**：获取官方版本列表（正式版 / 快照 / 旧版），一键下载客户端、依赖库、原生库、游戏资源，支持 SHA-1 完整性校验与一键修复
